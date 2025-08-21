@@ -9,6 +9,8 @@ contract BasicNftTest is Test {
     DeployBasicNft public deployer;
     BasicNft public basicNft;
     address public USER = makeAddr("user");
+    string public constant VEEFOURHRC =
+        "https://ipfs.io/ipfs/QmQvDNeHPbmwcHHuX9G3b7VwAQV1pbZbtyg8576CxeMr2S";
 
     function setUp() public {
         deployer = new DeployBasicNft();
@@ -31,6 +33,13 @@ contract BasicNftTest is Test {
 
     function testCanMintAndHaveABalance() public {
         vm.prank(USER);
-        // basicNft.mintNft;
+
+        basicNft.mintNft(VEEFOURHRC);
+
+        assert(basicNft.balanceOf(USER) == 1);
+        assert(
+            keccak256(abi.encodePacked(VEEFOURHRC)) ==
+                keccak256(abi.encodePacked(basicNft.tokenURI(0)))
+        );
     }
 }
